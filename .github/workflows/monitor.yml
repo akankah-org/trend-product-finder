@@ -1,0 +1,34 @@
+name: Monitor Harian
+
+on:
+  schedule:
+    - cron: '0 1 * * *'   # 08:00 WIB, tanpa API/kuota (baca file saja)
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    env:
+      TELE_BOT: ${{ secrets.FASHION_RADAR_BOT }}
+      TELE_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Ringkasan kesegaran
+        id: mon
+        run: |
+          python monitor.py | tee /tmp/mon.txt
+          echo "MSG<<EOF" >> $GITHUB_ENV
+          cat /tmp/mon.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Notif Fashion bot
+        if: env.TELE_BOT != ''
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${TELE_BOT}/sendMessage" \
+            -d "chat_id=${TELE_CHAT}" --data-urlencode "text=${MSG}" > /dev/null || true
