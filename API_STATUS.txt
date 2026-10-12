@@ -1,0 +1,110 @@
+API STATUS — registry endpoint (update tiap verifikasi)
+Format: API | endpoint | status | terakhir cek | catatan
+
+Syphoon Shopee (RapidAPI, BASIC 50/bln):
+- POST / | OK 200 | 2026-10-03 | get_pc by shop_id+item_id; 404/400 ditagih!
+- OUTAGE 501 massal sejak 2026-10-03 malam (termasuk produk yang kemarin
+  200). Data web = snapshot terakhir-good. Cek pulih max 1 req/hari.
+- PULIH 2026-10-04 (200, 6/6). BUKTI harga fluktuatif: Aisyah
+  119->117->119rb dalam 2 hari (caveat harga TERKONFIRMASI empiris).
+  Snapshot kosong (outage) DILEWATI saat hitung delta (pakai 2 berisi).
+- usage 36/40 lokal (~36/50 real) per 2026-10-04 | guard lokal 40 (shopee_rapid.py). KETAT: snapshot penuh berikutnya hanya bila perlu.
+- Deploy Space de109fc (2026-10-04): 16 item, tab TikTok produk-only, src-tag, rating fix.
+
+TikTok Trends api-creators (RapidAPI):
+- GET /creators/popular | DOWN 400 | 2026-10-03 | sisi TikTok mati
+  (provider transparan, tunggu pulih).
+- (keyword/hashtag/trending-feed: BELUM diuji — butuh URL playground)
+
+Apify parseforge/tiktok-scraper (token user, free credits):
+- OK 200 | 2026-10-03 | Kolektor: tiktok_apify.py (keywords, region ID).
+  ATURAN: keyword = FRASA umum ("hijab viral", bukan "hijab" 1 kata).
+  Skema flat: authorUsername/Followers, play/like/comment/share/saveCount,
+  description, hashtags, url, location.
+  Temuan: video hijab viral 637rb plays (@novivividhia, #trendhijab2026).
+  Catatan: ini SUDUT KONTEN (inspirasi video), bukan daftar produk.
+- TikTok LIVE produk (lapis B): GAGAL probe 2026-10-03 (antibot timeout
+  Playwright headless). Tertunda: butuh Shop API / pendekatan lain.
+
+JNX TikTok Trends Fynak404 (RapidAPI, BASIC 10/bln):
+- GET /api/v1/tiktok/trends?country=ID | OK 200 | 2026-10-03
+  (param BENAR: country, BUKAN region. BASIC limit 5/request.)
+  Kolektor: tiktok_rapid.py (guard 8/bln). Terpakai ~5/10.
+  CATATAN: isi = tren UMUM ID (event/musik), bukan fashion.
+  Masuk web HANYA bila hashtag fashion muncul.
+- STATUS: DIBATALKAN user 2026-10-03. Jangan panggil lagi
+  (401/403 expected). Kolektor tetap arsip bila subscribe ulang.
+
+Relu Shopee (RapidAPI, BASIC 10/hari):
+- (belum subscribe/test)
+
+ak4zh shopee6 (RapidAPI, BASIC 500/bln):
+- route TAK DIKETAHUI (404 x5) + backend 502 | 2026-10-03 | parkir
+
+sea-ecommerce-api (RapidAPI):
+- GET /shopee/product | 200 KOSONG 2x | 2026-10-03 | backend mati, parkir
+
+Google Trends (langsung, gratis):
+- explore + widgetdata/multiline + relatedsearches | OK | 2026-10-03
+- dailytrends MATI 404 | 2026-10-03 | jangan pakai
+- batas: 429 agresif -> batch 5, jeda 25 dtk, retry 90 dtk
+
+- ROTASI 2026-10-05: token lama (apify.120.bak, mati 401) -> Apify.Tri. Valid 200 (nebulous_bradawl), run --test SUCCEEDED.
+
+Apify herus13/tiktok-shop-scraper (token Apify.Tri, pay-per-event):
+- OK SUCCEEDED | 2026-10-05 | Kolektor: shop_full.py (search_terms, region=ID).
+  Skema nyata: search_terms[] (BUKAN keywords), region (BUKAN country,
+  default US -> WAJIB 'ID'), max_results, scrape_product_details.
+  Output: product_id/title/price(Rp)/seller/rating/review_count/
+  sold_count/product_url(Tokopedia)/region/scraped_at.
+- Storefront ID = Tokopedia (native). Keyword search ID OK (7 storefront:
+  US VN TH PH MY SG ID; GB/MX/JP tanpa search; BR mati).
+- Biaya Free tier: $0.008/hasil search + $0.002/start.
+  Run 2026-10-05: 5 terms x 12 = 100 produk = ~$0.80. Run IDs: CyKRboywYfFqAuobv
+  (probe US, 0 item), 5vRNS0dmzhXyR7hiQ (probe US, 5 item),
+  iJ8fGUPdcZp2umlfX (run ID, 100 item).
+- ATURAN: region ID selalu eksplisit; tanpa itu fallback US ($, bukan Rp).
+- GH secret APIFY_TOKEN @ akankah-org/trend-fashion-auto (201 2026-10-05).
+
+FREKUENSI UPDATE (berapa kali refresh per sumber):
+- TikTok Shop (herus13): MANUAL maks 1x/minggu (~$0.80/run).
+- Syphoon Shopee: KETAT, hanya bila perlu (36/40).
+- Google Trends: ON-DEMAND manual. TikTok video: ON-DEMAND manual.
+- GH trend-fashion-auto: OTOMATIS 1x/hari 02:00 UTC.
+- Space: SETIAP PUSH. (detail: METODOLOGI.txt butir 9)
+
+- Syphoon usage 37/40 lokal (2026-10-05, --test OK 200). Sisa buffer 3.
+- GH shop-weekly.yml HIJAU run perdana 2026-10-05 (run 37312903234):
+  data/shop_products.json terisi (Tokopedia IDR + sold). Berikutnya
+  otomatis Senin 03:00 UTC.
+- TikTok oEmbed verifikasi video: 429 semua (IP datacenter di-throttle).
+  Data video Apify tetap acuan (koleksi via residential proxy).
+
+TikTok Creative Center Top Ads (Apify, calon sumber tab iklan):
+- doliz (68rb run): butuh COOKIES login CC — TERTUNDA (tanpa akun iklan).
+- azzouzana Top Ads ($0.006/hasil): skema tak diketahui; probe 2026-10-08
+  GAGAL bukan karena input, tapi kredit 402 (sisa $0.000785 = HABIS).
+- Kolektor standby: tiktok_ads_collect.py (guard tolak run bila < $1).
+- Dampak: Shop refresh mingguan GH ikut macet sampai top-up.
+
+Captapi TikTok Ad Library (key user, 100 kredit gratis):
+- Key VALID (HTTP 200 api.captapi.com, 2026-10-08). Default country US.
+- Tersimpan: credential/captapi.txt + API_VAULT.enc + TOKEN.7z + GH secret CAPTAPI_KEY.
+- Upstream PULIH 2026-10-08 malam: 19 iklan ID (country=ID OK).
+- ad-details DSA hanya EU/UK/CH (ID absent by design) — tanpa enrich produk.
+- Multi-kategori 2026-10-08: 8 query (tas/baju/sepatu/jam/dress/gamis/kemeja/celana), 38 unik, 22 industri.
+- Batas: 1 leaderboard page (~20 baris); q hanya ranking ulang pool yg sama.
+- Snapshot: data/captapi_topads_id.json. Kredit ~≤16 (cache=true).
+- Probe lama 503 (2x) arsip di atas.retryable, TIDAK ditagih). Coba lagi nanti/cache=true gratis.
+
+Sinkron 2026-10-09: live 1af2e26 (154 item; banner jadwal+kuota;
+SW fr-v4 network-first + auto-reload; 38 iklan multi-kategori live).
+Kuota: Syphoon 3/40 | Apify $0,0008 HABIS | Captapi +-84/100.
+OPEN: subdomain akankah.eu.org (opsi A Pages / B CNAME / C Worker).
+
+Sinkron 2026-10-10: live 0b7f826 (521 item, 12 tab).
+- SocialCrawl: key valid, search ID OK (148/5 query), saldo 94/100;
+  /product detail 503 persisten (3x) -> tanpa sold baru.
+- Dork: site:tiktok.com 17 kat (134 video) + site:shopee.co.id 17 kat
+  (79 produk + rating jujur). Dork-tool mati; operator via search hidup.
+- Buyer 2-tier + tombol hijau/hitam. Prompt: password + tooltip.

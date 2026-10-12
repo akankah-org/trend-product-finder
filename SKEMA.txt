@@ -1,0 +1,30 @@
+SKEMA — Trend Product Finder
+
+1. RECORD PRODUK (per snapshot)
+   product_id | product_name | normalized_name | category | subcategory
+   shop_name | marketplace | product_url | affiliate_url | image
+   price | rating | review_count | sold_count (jika ada)
+   collected_at
+
+2. HISTORI PER PRODUK (wajib untuk growth per produk)
+   product_id | collected_at | price | rating | review_count | sold_count
+   Tanpa histori per produk: growth hanya level cluster (tulis begitu).
+
+3. RECORD CLUSTER/TREN
+   cluster_id | label (mis. "Dress Korea A-Line") | sinyal_sekarang
+   sinyal_7d_lalu | growth_7d | trend_30d | trend_90d (fase 2+)
+   contributor_top3 (product_id + growth masing-masing)
+
+4. NORMALISASI NAMA (aturan v1)
+   - lowercase, hapus kata toko/promo ("murah", "viral", "COD", nama toko).
+   - samakan varian ejaan (aline = a-line = aline).
+   - kunci cluster = 3 kata konten pertama setelah pembersihan.
+   - kasus ragu: cluster terpisah (pecah lebih aman dari gabung salah).
+
+5. KAMUS OKASI (search intent, starter)
+   kondangan -> dress formal, kebaya, gamis pesta
+   wisuda -> kebaya, dress midi
+   lebaran -> gamis, koko, hijab segiempat
+   kerja/kantor -> blouse, blazer, rok span
+   pantai/liburan -> dress casual, shorts
+   (tambah sesuai query log nyata)

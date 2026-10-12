@@ -1,0 +1,30 @@
+MOCKUP — Layar Trend Product Finder (+ 5 koreksi wajib)
+
+1. HOMEPAGE /rising-7d
+   "🔥 PAKAIAN PALING NAIK — 7 HARI (data 3 Okt 2026)"
+   Rank | Tipe | Growth | Produk | Toko | [Lihat]
+   (KOREKSI 1: cap tanggal wajib di tiap blok angka.)
+
+2. DETAIL CLUSTER (klik tipe)
+   "🔥 Dress Korea A-Line — +182% dalam 7 hari (data 3 Okt 2026)"
+   Tabel contributor LENGKAP (paginasi bila > 10).
+   (KOREKSI 2: tampilkan semua N produk, atau tulis jujur "3 teratas dari 14".)
+
+3. SEARCH — DICABUT 2026-10-03 (keputusan user; kamus okasi arsip di SKEMA).
+   "🔍 Produk apa yang sedang UP?" + filter window/kategori.
+   Query okasi dipetakan via KAMUS OKASI (SKEMA.txt bag. 5).
+   (KOREKSI 3: histori growth butuh data per PRODUK, bukan agregat tipe.)
+
+4. BANDINGAN ( positioning, bukan fitur)
+   Google Trends: "banyak dicari." / Web ini: "naik X% + produk + toko + link."
+   (KOREKSI 4: tiap angka link ke halaman METODOLOGI.txt yang dipublikasikan.)
+
+5. NAVIGASI
+   MINGGU INI | BULAN INI | TERLARIS | RISING
+   (KOREKSI 5: tombol HARI INI disembunyikan sampai sampling >= 2x sehari.)
+
+6. TAB SUMBER (as-built 2026-10-03): [Semua][Google][Shopee][TikTok].
+   Mapping eksplisit via srcOf (Shopee API->Shopee; marketplace TikTok->TikTok;
+   sisanya Google). Default = Shopee.
+7. TAG SUMBER PER KARTU (as-built): `src: ...` + kelas bukti + null-guard
+   (pelajaran: hapus elemen = cek referensi JS; badge ganda = validasi tag).

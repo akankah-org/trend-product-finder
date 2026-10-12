@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pid
+.env
+credential/
+_dep/
+static/

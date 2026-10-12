@@ -1,0 +1,24 @@
+MVP — Trend Product Finder (fase 1)
+
+BATAS SCOPE (yang TIDAK dibangun fase 1)
+- Mode HARI INI, trend_30d/90d, VIRAL terpisah, social/search signals,
+  "Kenapa trending?", multi-marketplace (Shopee dulu).
+
+YANG DIBANGUN
+1. Pipeline: snapshot ada -> normalisasi (aturan SKEMA) -> cluster
+   -> velositas 7d -> ranking RISING + TRENDING + TERLARIS.
+2. Halaman: /rising-7d (1 kategori pilot: DRESS) + detail cluster
+   (top contributor + toko + link affiliate) + halaman metodologi.
+3. Cap tanggal + label "3 teratas dari N" + link metodologi di tiap angka.
+
+DEFINISI SELESAI
+- Halaman rising-7d dress live dari data nyata (bukan mock).
+- Metodologi tertulis = yang berjalan (audit lolos: tiap angka terlacak).
+
+KILL CRITERIA (evaluasi 8 minggu)
+- Tak ada 1 pun order affiliate dari halaman rising -> hentikan,
+  evaluasi sumber data (bukan tambah fitur).
+- Rising tak kalahkan performa listing biasa -> tesis velositas salah.
+
+FASE 2 (hanya bila fase 1 hidup)
+- Kategori berikut, trend_30d, "Kenapa trending?", social signals.

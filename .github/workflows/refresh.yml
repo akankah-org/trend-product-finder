@@ -1,0 +1,43 @@
+name: Refresh Mingguan
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'   # Senin 03:00 UTC (guard kuota di script)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      SOCIALCRAWL_KEY: ${{ secrets.SOCIALCRAWL_KEY }}
+      TELE_BOT: ${{ secrets.FASHION_RADAR_BOT }}
+      TELE_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Kolektor SocialCrawl
+        run: python socialcrawl_collect.py
+
+      - name: Commit data kembali
+        run: |
+          git config user.name "radar-bot"
+          git config user.email "radar-bot@users.noreply.github.com"
+          git add web/data/ data/ 2>/dev/null || git add web/data/
+          git diff --cached --quiet || git commit -m "auto: refresh mingguan [skip ci]"
+          git push origin main
+
+      - name: Notif Fashion bot
+        if: always() && env.TELE_BOT != ''
+        run: |
+          MSG="fashion-radar refresh: ${{ job.status }} ($(date -u +%Y-%m-%dT%H:%MZ))"
+          curl -s -X POST "https://api.telegram.org/bot${TELE_BOT}/sendMessage" \
+            -d "chat_id=${TELE_CHAT}" --data-urlencode "text=${MSG}" > /dev/null || true
+          echo "notif terkirim (butuh START bot dulu)"

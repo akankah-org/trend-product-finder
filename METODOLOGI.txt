@@ -1,0 +1,98 @@
+﻿METODOLOGI â€” Trend Product Finder
+(Status: kontrak kejujuran. Angka yang tak bisa dilacak ke sini = dilarang tampil.)
+
+1. DEFINISI SINYAL (v1, satu-satunya yang dipakai fase 1)
+   Sinyal = jumlah listing unik per cluster ternormalisasi per snapshot.
+   listing unik = product_id berbeda (dedup by shortlink).
+
+2. RUMUS GROWTH
+   growth_7d = (sinyal_sekarang - sinyal_7hari_lalu) / sinyal_7hari_lalu * 100%
+   Syarat: kedua snapshot ADA (tidak interpolasi; data hilang = strip "data tak lengkap").
+
+3. DEFINISI RANKING (jangan campur)
+   Scope produk: atasan wanita, dress, gamis, kemeja, blouse, abaya.
+   HIJAB/MUKENA MASUK radar (keputusan user 10 Okt: semua yang laku ikut; by-Google + kurasi). Tab TikTok = produk TikTok Shop SAJA
+   (query/video bukan produk).
+   - RISING: growth_7d tertinggi (min. 5 listing, anti noise 1-toko).
+   - TRENDING: growth_7d > 20% DAN sinyal_sekarang di 20% teratas.
+   - TERLARIS: sold_count tertinggi (snapshot terakhir, bukan growth).
+   - VIRAL: growth_7d > 100% (subset RISING, label khusus).
+   Ambang di atas v1; tuning hanya via evaluasi bulanan tertulis.
+
+4. ATURAN JUJUR
+   - Cap tanggal di tiap angka ("data 3 Okt 2026").
+   - Top-3 tampil bila total > 3, tulis "3 teratas dari N".
+   - Mode HARI INI nonaktif sampai sampling >= 2x sehari.
+   - AI tak boleh mengubah angka; hanya kelompok + jelaskan.
+
+5. SUMBER DATA (fase 1)
+   - Snapshot marketplace berkala (Collshp GraphQL, 1x24 jam).
+   - Search/social/editorial = fase 2+ (belum ada akses; dilarang klaim).
+
+6. LAPIS SUMBER (bila lapis awal limit)   LAPIS 1 (utama, gratis/murah):
+   - Google Trends ID (rate-limit longgar; jeda 25 dtk, batch 5).
+   - RapidAPI Syphoon BASIC 50/bln (guard: BUDGET_BULANAN=40).
+   LAPIS 2 (otomatis bila lapis 1 limit/habis/mati):
+   - TikTok Creative Center manual (top products, tanpa key).
+   - Google Shopping / hasil search (URL produk -> ID).
+   - RSS media fashion (sinyal editorial).
+   - RapidAPI alternatif (dataapi / ScrapingBee, evaluasi dulu).
+   LAPIS 3 (cadangan dalam: bila lapis 1-2 buntu):
+   - Relu Consultancy Shopee API (RapidAPI): search produk,
+     seller details (followers/rating/sold toko), flash sale.
+     Gratis 10/hari hard limit; guard lokal 8/hari.
+     Wilayah ID didukung. SL/latency belum terbukti (0%/12 dtk).
+     Verifikasi 200 dulu sebelum dipakai produksi.
+   CALON (evaluasi tertunda):
+   - ak4zh/shopee6 (RapidAPI): BASIC 500/bln, GET by product-URL.
+     Tertunda: route path tak ditemukan di dashboard + backend 502
+     saat diuji. Lanjut bila route didapat (tanpa tebak: 404 ditagih).
+   - sea-ecommerce-api (RapidAPI): GET /shopee/product (country,
+     shop_id, id) â€” route JELAS, 200, tapi DATA KOSONG 2x
+     (nama "", harga 0). Sumber backend mati. Parkir; cek ulang lain waktu.
+   ATURAN PINDAH LAPIS: tercatat di log (sumber apa, kenapa pindah,
+   kapan kembali). Angka lapis 2 dilabel sumbernya; skala beda
+   dilarang dibandingkan langsung (lihat butir 4).
+
+7. ARSITEKTUR SUMBER (tetap, jangan tukar)
+   - TikTok HANYA dari Apify (parseforge/tiktok-scraper, video+kreator).
+     DILARANG via RapidAPI (JNX dibatalkan, creators mati).
+   - Shopee HANYA dari RapidAPI Syphoon (get_pc, POST /).
+   - Search HANYA Google langsung (tanpa perantara).
+   Pelanggaran = data tercemar sumber. Cek: grep 'rapid.*tiktok'
+   harus NOL di semua .py.
+
+8. LAPIS TIKTOK SHOP (aktif 2026-10-05, Apify herus13, region ID)
+   - Sumber: keyword search storefront ID (Tokopedia) â€” produk ASLI
+     (judul, harga Rp, seller, rating, review_count, sold_count).
+   - Tab TikTok = video viral (sinyal konten) + produk Shop.
+   - Tab Pembeli Berulang Teratas = produk TikTok Shop SAJA,
+     ranking sold_count desc, badge 'terjual N', link Tokopedia.
+     Video (tanpa sold) dan Shopee (sumber beda) DIKECUALIKAN.
+   - KEPUTUSAN USER 2026-10-05: tanpa filter kategori â€” semua produk yang
+     laku berulang masuk (termasuk hijab-set/underwear/jas hujan bila
+     sold tinggi). Skor HIJAB OUT butir 3 TIDAK berlaku untuk tab ini.
+   - sold_count = proksi ulang-beli (identitas buyer tak dipublikasi
+     platform mana pun). Label kartu jujur: 'terjual', bukan 'repeat buyer'.
+
+9. JADWAL UPDATE (berapa kali refresh per sumber)
+   - Google Trends kolektor: ON-DEMAND manual (gratis; guard 429:
+     batch 5, jeda 25 dtk).
+   - Syphoon Shopee: KETAT, hanya bila perlu (36/40 per 2026-10-04).
+   - TikTok video (parseforge): ON-DEMAND manual (kredit Apify).
+   - TikTok Shop (herus13): MANUAL, maks 1x/MINGGU (~$0.80/run =
+     ~$3.20/bln, dalam kredit trial $5). Harian = ~$24/bln = JANGAN
+     tanpa langganan.
+   - GH trend-fashion-auto (pipeline lama): OTOMATIS 1x/HARI
+   - GH shop-weekly (TikTok Shop ID): OTOMATIS 1x/MINGGU Senin 03:00 UTC (HIJAU perdana 2026-10-05) + secret APIFY_TOKEN.
+     02:00 UTC (cron '0 2 * * *').
+   - Space fashion-radar: SETIAP PUSH (manual, ~2 mnt rebuild).
+
+10. ATURAN TAB + TREND-UP (10 Okt)
+   - Buyer 2-tier: lapis terjual dulu (sold desc), lalu lapis ulasan
+     (reviews desc). Dalam-tier konsisten; antar-tier tak dibandingkan.
+   - Trend-up iklan: muncul-ulang + naik >=20% (ads_track.json) =>
+     badge NAIK + teratas. 1 snapshot = belum dinilai.
+   - Tombol hijau = Tokopedia, hitam = TikTok (domain link).
+   - Dork rutin per kategori (site: + keyword); angka eksplisit saja
+     (impr/pop/likes/CTR/rating), cluster tak berlabel DILARANG tebak.
