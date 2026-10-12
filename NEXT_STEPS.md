@@ -15,8 +15,17 @@
 - GH secrets: APIFY_TOKEN + CAPTAPI_KEY + SOCIALCRAWL_KEY @ trend-fashion-auto
 - HIJAB/MUKENA MASUK radar (cabut HIJAB OUT, 10 Okt)
 
+## Done ✅ (11-12 Okt)
+- Prompt: textarea besar + tab TikTok/Shopee pisah
+  (frprompts/frprompts_shopee), 777 Rename/Ubah/Hapus dua-duanya
+- Insiden 5 tab hilang (regex) → pulih, 13 tab. Live `d527b80`
+- Repo `akankah-org/trend-product-finder` + refresh mingguan +
+  monitor harian per-tab (SUCCESS). Secrets baru @ repo itu.
+  Notif deploy=Opencodeku, cron=fashion bot (START dulu)
+- `notify.py` + `monitor.py` (STALE >7h)
+
 ## Current State
-- Live: `0b7f826` (tombol warna-link)
+- Live: `d527b80` (13 tab, prompt ganda)
 - Kuota: Syphoon 3/40 • Apify $0,0008 HABIS • Captapi +-80/100
   • SocialCrawl 94/100 (pakai 6)
 - OPEN: subdomain akankah.eu.org (A/B/C) + enrich sold (detail 503)
