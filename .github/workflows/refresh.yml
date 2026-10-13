@@ -38,6 +38,8 @@ jobs:
         if: always() && env.TELE_BOT != ''
         run: |
           MSG="fashion-radar refresh: ${{ job.status }} ($(date -u +%Y-%m-%dT%H:%MZ))"
+          KB='{"keyboard":[[{"text":"Prompt TikTok"}],[{"text":"Prompt Shopee"}]],"resize_keyboard":true}'
           curl -s -X POST "https://api.telegram.org/bot${TELE_BOT}/sendMessage" \
-            -d "chat_id=${TELE_CHAT}" --data-urlencode "text=${MSG}" > /dev/null || true
+            -d "chat_id=${TELE_CHAT}" --data-urlencode "text=${MSG}" \
+            --data-urlencode "reply_markup=${KB}" > /dev/null || true
           echo "notif terkirim (butuh START bot dulu)"

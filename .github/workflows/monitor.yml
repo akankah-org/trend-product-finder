@@ -30,5 +30,7 @@ jobs:
       - name: Notif Fashion bot
         if: env.TELE_BOT != ''
         run: |
+          KB='{"keyboard":[[{"text":"Prompt TikTok"}],[{"text":"Prompt Shopee"}]],"resize_keyboard":true}'
           curl -s -X POST "https://api.telegram.org/bot${TELE_BOT}/sendMessage" \
-            -d "chat_id=${TELE_CHAT}" --data-urlencode "text=${MSG}" > /dev/null || true
+            -d "chat_id=${TELE_CHAT}" --data-urlencode "text=${MSG}" \
+            --data-urlencode "reply_markup=${KB}" > /dev/null || true

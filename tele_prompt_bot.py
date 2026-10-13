@@ -54,9 +54,9 @@ def call(method, **kw):
 
 def kirim(chat, text, tombol=None):
     kw = {"chat_id": chat, "text": text}
-    if tombol:
-        kw["reply_markup"] = json.dumps(
-            {"keyboard": tombol, "resize_keyboard": True})
+    kb = tombol if tombol is not None else MENU
+    kw["reply_markup"] = json.dumps(
+        {"keyboard": kb, "resize_keyboard": True})
     return call("sendMessage", **kw)
 
 
