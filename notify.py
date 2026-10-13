@@ -8,6 +8,8 @@ import sys
 import urllib.parse
 import urllib.request
 
+from tele_guard import check
+
 BASE = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -40,6 +42,7 @@ if __name__ == "__main__":
     which = (sys.argv[1] if len(sys.argv) > 1 else "fashion").lower()
     msg = " ".join(sys.argv[2:]) or "(tes notif)"
     toks = load_tokens()
+    check(toks["TELEGRAM_CHAT_ID"])
     token = toks["FASHION_RADAR_BOT" if which == "fashion"
                  else "OPENCODEKU_BOT"]
     print(send(token, toks["TELEGRAM_CHAT_ID"], msg))
