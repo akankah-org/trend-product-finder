@@ -20,24 +20,4 @@ CATATAN:
 - Start-Process butuh path ber-quote (spasi di nama folder!).
 Refresh: Shop manual 1x/minggu | GH trend-auto 1x/hari | Space tiap push.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+NOTIF: tiap deploy kirim Opencodeku: python notify.py opencodeku 'fashion-radar live <sha> (<n> item)'
