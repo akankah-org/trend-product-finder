@@ -203,13 +203,20 @@ def handle(msg):
         if rest and rest[0].lower() in ("tiktok", "shopee"):
             kind = rest[0].lower()
             rest = rest[1:]
-        if first in ("lihat", "add", "tambah"):
+        if first in ("lihat", "salin", "add", "tambah"):
             if not kind:
-                kirim(chat, "Pilih menu dulu: /add tiktok | ... "
+                kirim(chat, "Pilih menu dulu: /lihat shopee 3 "
                       "atau buka menu Prompt TikTok/Shopee.")
                 return
             if first == "lihat":
                 kirim(chat, cmd(kind, ["lihat"] + rest, chat))
+            elif first == "salin":
+                try:
+                    q = load()[kind][int(rest[0]) - 1]
+                    kirim(chat, q["x"])
+                except (ValueError, IndexError):
+                    kirim(chat, "Nomor tak ada. Format: /salin %s <no>"
+                          % kind)
             else:
                 kirim(chat, do_mutasi(kind, ["add"] + rest, chat)
                       if unlocked(chat) else "Kunci dulu: /pass 777")
@@ -221,8 +228,8 @@ def handle(msg):
             kirim(chat, do_mutasi(kind, [first] + rest, chat)
                   if unlocked(chat) else "Kunci dulu: /pass 777")
             return
-        kirim(chat, "Perintah: /add /lihat /edit /rename /del "
-              "+ jenis (tiktok/shopee). Contoh: /add shopee | Judul | isi")
+        kirim(chat, "Perintah: /add /lihat /salin /edit /rename /del "
+              "+ jenis (tiktok/shopee). Contoh: /salin shopee 1")
         return
 
 
