@@ -53,11 +53,28 @@ def call(method, **kw):
 
 
 def kirim(chat, text, tombol=None):
+    try:
+        with open(os.path.join(BASE, "data", "bot.log"), "a",
+                  encoding="utf-8") as f:
+            f.write(f"{time.strftime('%H:%M:%S')} OUT {len(text)}c\n")
+    except Exception:
+        pass
     kw = {"chat_id": chat, "text": text}
     kb = tombol if tombol is not None else MENU
-    kw["reply_markup"] = json.dumps(
-        {"keyboard": kb, "resize_keyboard": True})
-    return call("sendMessage", **kw)
+    # Telegram batas 4096 char/pesan -> potong (prompt bisa 15rb+)
+    parts = [text[i:i + 3900] for i in range(0, len(text), 3900)] or [text]
+    last = None
+    for j, part in enumerate(parts):
+        if len(parts) > 1:
+            part = "[%d/%d]\n" % (j + 1, len(parts)) + part
+        kw["text"] = part
+        if j == 0:
+            kw["reply_markup"] = json.dumps(
+                {"keyboard": kb, "resize_keyboard": True})
+        elif "reply_markup" in kw:
+            del kw["reply_markup"]
+        last = call("sendMessage", **kw)
+    return last
 
 
 def load():
@@ -247,6 +264,13 @@ def main():
                 off = max(off, u["update_id"])
                 if "message" in u:
                     try:
+                        m = u["message"]
+                        try:
+                            with open(os.path.join(BASE, "data", "bot.log"),
+                                      "a", encoding="utf-8") as f:
+                                f.write(f"{time.strftime('%H:%M:%S')} IN {m.get('chat', {}).get('id')}:{str(m.get('text'))[:40]}\n")
+                        except Exception:
+                            pass
                         handle(u["message"])
                     except PermissionError:
                         pass
