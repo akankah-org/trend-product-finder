@@ -28,3 +28,27 @@ SKEMA — Trend Product Finder
    kerja/kantor -> blouse, blazer, rok span
    pantai/liburan -> dress casual, shorts
    (tambah sesuai query log nyata)
+
+6. FIELD TAMBAHAN OUTPUT WEB (per produk, web/data/products.json)
+   updated   : ISO UTC - kapan item terakhir berubah. Dipakai untuk urutan
+               "terbaru di atas" (global, bukan per-browser). Item lama tanpa
+               updated memakai waktu commit terakhir berkas.
+   sumber    : "api" | "by google" -> badge di kartu: API / BY GOOGLE
+               (IKLAN dipakai untuk item ber-kelas IKLAN TOKO/TIKTOK/SHOPEE).
+   kategori  : label tampil (Atasan Wanita, Tas Wanita, Gamis, Dress, Kebaya,
+               Rok, Celana Wanita, Hijab/Pashmina, Batik, Tunik, Setelan).
+               Bila kosong -> klasifikasi otomatis dari nama produk:
+                 tas selempang/sling bag/tote bag/handbag/clutch -> Tas Wanita
+                 blouse/blus/kemeja/kaos/atasan/crop top/tanktop/polo  -> Atasan Wanita
+                 gamis/abaya/jubah/kaftan -> Gamis; dress/terusan/daster -> Dress
+                 rok -> Rok; celana/kulot/palazzo -> Celana Wanita
+                 hijab/pashmina/kerudung/jilbab -> Hijab; batik -> Batik
+                 tunik -> Tunik; setelan/one set -> Setelan; sisanya -> Lainnya
+   sinyal    : asal data + tanggal + penanda sumber, mis.
+               "TikTok Shop ID via SocialCrawl (20261026) [API]"
+               "Google Dork site:shopee.co.id [Atasan Wanita] (20261026) [by Google]"
+
+7. SUMBER DATA & CARA TAMBAH PRODUK PER KATEGORI
+   python tambah_kategori.py tiktok "tas selempang" "Tas Wanita" 20
+   python tambah_kategori.py dork-shopee "blouse kemeja kaos wanita" "Atasan Wanita" 20
+   (id baru: sc-<id> untuk API, gd-up-<slug>-<n> untuk dork; item lama tidak dihapus)

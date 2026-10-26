@@ -108,3 +108,17 @@ Sinkron 2026-10-10: live 0b7f826 (521 item, 12 tab).
 - Dork: site:tiktok.com 17 kat (134 video) + site:shopee.co.id 17 kat
   (79 produk + rating jujur). Dork-tool mati; operator via search hidup.
 - Buyer 2-tier + tombol hijau/hitam. Prompt: password + tooltip.
+
+Sinkron 2026-10-26: live c0df1d8 (689 item; chip kategori + flag API/BY GOOGLE).
+- SocialCrawl: saldo 74/100. Dipakai 2 query ("tas selempang" + "tas wanita") -> 38 item
+  TikTok Shop (sumber=api, sinyal ... [API]). Tanpa enrich detail (hemat kredit).
+- Syphoon Shopee: sisa 3/40. Endpoint HANYA detail PDP (body {url: .../api/v4/pdp/get_pc}).
+  URL search (api/v4/search/search_items maupun /search?keyword=) -> HTTP 501
+  "Request failed. You won't be charged for this request" = TIDAK didukung, tidak kena kredit.
+  Konsekuensi: atasan Shopee tidak bisa lewat API -> dipakai Google dork (flag BY GOOGLE).
+- google-search74 (RapidAPI): WAJIB header User-Agent browser. Tanpa UA -> HTTP 403
+  Cloudflare "error code: 1010". Dengan UA -> OK (1 query site:shopee.co.id
+  "blouse kemeja kaos wanita" -> 20 produk; filter hanya URL -i.<shop>.<item>).
+- Shopee search page via headless Chrome: diblok (tanpa __INITIAL_STATE__, 0 harga tampil).
+- Kategori default: Shopee = Atasan Wanita (37 item: kaos 26 / blouse 20 / kemeja 22 /
+  atasan 18 / polo 3), TikTok = Tas Wanita (45 item: 38 API + 7 by Google).

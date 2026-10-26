@@ -24,11 +24,21 @@
   Notif deploy=Opencodeku, cron=fashion bot (START dulu)
 - `notify.py` + `monitor.py` (STALE >7h)
 
+## Done (26 Okt)
+- `stamp_updated.py`: field `updated` per item -> urutan "terbaru di atas" global
+- `tambah_kategori.py`: tarik produk per kategori via API (SocialCrawl) atau Google dork
+- 58 item baru: 38 tas TikTok (API) + 20 atasan Shopee (dork) -> total 689 item
+- Web: chip kategori per tab (default Shopee=Atasan Wanita, TikTok=Tas Wanita),
+  badge flag API/BY GOOGLE/IKLAN + legenda kata kunci, tab per marketplace
+- Deploy `7b7f9ba` lalu `c0df1d8` (label tab "Shopee · Atasan Wanita")
+
 ## Current State
-- Live: `d527b80` (13 tab, prompt ganda)
-- Kuota: Syphoon 3/40 • Apify $0,0008 HABIS • Captapi +-80/100
-  • SocialCrawl 94/100 (pakai 6)
-- OPEN: subdomain akankah.eu.org (A/B/C) + enrich sold (detail 503)
+- Live: `c0df1d8` (689 item; chip kategori + flag sumber; Shopee=Atasan Wanita,
+  TikTok=Tas Wanita)
+- Kuota: Syphoon 3/40 (TANPA endpoint search) • Apify $0,0008 HABIS • Captapi +-80/100
+  • SocialCrawl 74/100
+- OPEN: subdomain akankah.eu.org (A/B/C) + enrich sold (detail 503) +
+  atasan Shopee via API (butuh sumber search Shopee)
 
 ## Immediate Next Steps
 
