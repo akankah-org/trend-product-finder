@@ -3,7 +3,7 @@
 URL   : https://120n1aja-fashion-radar.static.hf.space
 Repo  : https://huggingface.co/spaces/120n1aja/fashion-radar (sdk: static)
 Sumber: E:\trend product finder\web\ (index.html + data\*.json)
-Live  : d527b80 (13 tab pulih + Prompt TikTok/Shopee)
+Live  : 5b41627 (tanpa tab Google, 531 item)
 
 CARA REFRESH (manual, ~2 menit):
   1. git clone <space> _dep (atau pull bila sudah ada)
@@ -21,3 +21,6 @@ CATATAN:
 Refresh: Shop manual 1x/minggu | GH trend-auto 1x/hari | Space tiap push.
 
 NOTIF: tiap deploy kirim Opencodeku: python notify.py opencodeku 'fashion-radar live <sha> (<n> item)'
+
+
+

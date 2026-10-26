@@ -7,6 +7,8 @@ import datetime
 import json
 import os
 
+from stamp_updated import stempel
+
 BASE = os.path.dirname(os.path.abspath(__file__))
 MVP = 'E:/trend product finder/web/data'
 MAP = {'gamis': 'Gamis', 'dress wanita': 'Dress', 'dress korea': 'Dress',
@@ -26,8 +28,10 @@ for kw, pts in d.get('keywords', {}).items():
 sinyal = {c: round(sum(v) / len(v)) for c, v in cat.items()}
 
 prods = json.load(open(os.path.join(MVP, 'products.json'), encoding='utf-8'))
+lama = json.loads(json.dumps(prods))  # snapshot sebelum diubah (pembanding stempel)
 for p in prods:
     p['sinyal_search'] = sinyal.get(p.get('category'), None)
+prods, _st = stempel(prods, lama)
 json.dump(prods, open(os.path.join(MVP, 'products.json'), 'w',
                       encoding='utf-8'), ensure_ascii=False, indent=1)
 meta = {'tanggal': d.get('waktu', '')[:8],

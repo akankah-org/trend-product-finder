@@ -16,6 +16,7 @@ import urllib.request
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 BASE = pathlib.Path(__file__).resolve().parent
+from stamp_updated import stempel  # noqa: E402  (butuh BASE di atas)
 HOST = 'https://www.socialcrawl.dev'
 TERMS = ['gamis', 'dress kondangan', 'kemeja wanita', 'blouse wanita',
          'abaya']
@@ -75,6 +76,7 @@ def main():
         json.dumps(snap, ensure_ascii=False), encoding='utf-8')
     WEB = BASE / 'web/data/products.json'
     prods = json.loads(WEB.read_text(encoding='utf-8'))
+    lama = json.loads(json.dumps(prods))  # snapshot sebelum diubah (pembanding stempel)
     prods = [x for x in prods if not str(x.get('id', '')).startswith('sc-')]
     for p in semua:
         sold = (p.get('enrich_units_sold') or p.get('enrich_sold_count')
@@ -91,9 +93,11 @@ def main():
             'g7': None, 'g30': None,
             'sinyal': f"TikTok Shop ID via SocialCrawl ({snap['waktu'][:8]})",
         })
+    prods, _st = stempel(prods, lama)
     WEB.write_text(json.dumps(prods, ensure_ascii=False, indent=1),
                    encoding='utf-8')
-    print(f'masuk: {len(semua)} | web: {len(prods)} | saldo: {balance()}')
+    print(f'masuk: {len(semua)} | web: {len(prods)} | saldo: {balance()} | '
+          f"stempel: {_st['baru']} baru, {_st['ubah']} berubah, {_st['tetap']} tetap")
 
 
 if __name__ == '__main__':
