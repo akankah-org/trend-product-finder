@@ -33,6 +33,8 @@ SKEMA — Trend Product Finder
    updated   : ISO UTC - kapan item terakhir berubah. Dipakai untuk urutan
                "terbaru di atas" (global, bukan per-browser). Item lama tanpa
                updated memakai waktu commit terakhir berkas.
+               Urutan = updated DESC; bila seri -> badge BARU (per-browser),
+               lalu aturan tab (sold / trend-likes / growth7d-30d).
    sumber    : "api" | "by google" -> badge di kartu: API / BY GOOGLE
                (IKLAN dipakai untuk item ber-kelas IKLAN TOKO/TIKTOK/SHOPEE).
    kategori  : label tampil (Atasan Wanita, Tas Wanita, Gamis, Dress, Kebaya,

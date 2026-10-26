@@ -1,4 +1,4 @@
-﻿METODOLOGI â€” Trend Product Finder
+METODOLOGI â€” Trend Product Finder
 (Status: kontrak kejujuran. Angka yang tak bisa dilacak ke sini = dilarang tampil.)
 
 1. DEFINISI SINYAL (v1, satu-satunya yang dipakai fase 1)
@@ -96,3 +96,26 @@
    - Tombol hijau = Tokopedia, hitam = TikTok (domain link).
    - Dork rutin per kategori (site: + keyword); angka eksplisit saja
      (impr/pop/likes/CTR/rating), cluster tak berlabel DILARANG tebak.
+
+11. URUTAN TAMPIL: "TERBARU DI ATAS" (26 Okt, berlaku SEMUA tab)
+   - Kunci utama: field `updated` (ISO UTC) per produk, urut DESC.
+     Disimpan di web/data/products.json -> GLOBAL, sama untuk semua
+     pengunjung (bukan localStorage, bukan per-browser).
+   - `updated` diisi `stamp_updated.py` hanya saat isi item benar-benar
+     berubah (harga/rating/review/sold/growth/sinyal). Sidik pembanding
+     TIDAK memuat `updated`, jadi menstempel ulang tidak menandai "berubah".
+   - Item lama tanpa `updated` memakai waktu commit terakhir berkas
+     (2026-10-12T10:30:04Z untuk 531 item) supaya run pertama tidak
+     menandai semua item sebagai baru.
+   - Seri (updated sama): badge BARU (per-browser, localStorage
+     `fradar_sig`) lebih dulu, lalu aturan tab:
+       Pembeli Berulang -> sold desc (lalu reviews desc)
+       Trend TikTok via Iklan / Shopee via Iklan -> trend 'up', lalu likes
+       tab lain -> growth7d (7 hari) atau growth30d (30 hari)
+   - Verifikasi 26 Okt (headless, 10 kombinasi tab+kategori):
+     pelanggaran urutan = 0 di Semua (689 kartu), Shopee (153),
+     Shopee by Google (149), TikTok (477), TikTok by Google (184),
+     Trend TikTok via Iklan (59), Pembeli Berulang (100),
+     Shopee+Atasan Wanita (37), TikTok+Tas Wanita (45).
+     "Shopee via Iklan" = 0 kartu karena memang belum ada data
+     IKLAN SHOPEE (bukan bug urutan).

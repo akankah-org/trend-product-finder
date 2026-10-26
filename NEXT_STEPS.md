@@ -30,7 +30,9 @@
 - 58 item baru: 38 tas TikTok (API) + 20 atasan Shopee (dork) -> total 689 item
 - Web: chip kategori per tab (default Shopee=Atasan Wanita, TikTok=Tas Wanita),
   badge flag API/BY GOOGLE/IKLAN + legenda kata kunci, tab per marketplace
-- Deploy `7b7f9ba` lalu `c0df1d8` (label tab "Shopee · Atasan Wanita")
+- Deploy `7b7f9ba`, `c0df1d8`, lalu `87d0402` (tab asli dipulihkan)
+- Verifikasi 26 Okt: urutan "terbaru di atas" = 0 pelanggaran di 10 kombinasi
+  tab+kategori (Semua 689, Shopee 153, TikTok 477, Pembeli Berulang 100, dst)
 
 ## Current State
 - Live: `c0df1d8` (689 item; chip kategori + flag sumber; Shopee=Atasan Wanita,
