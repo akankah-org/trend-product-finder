@@ -3,7 +3,7 @@
 URL   : https://120n1aja-fashion-radar.static.hf.space
 Repo  : https://huggingface.co/spaces/120n1aja/fashion-radar (sdk: static)
 Sumber: E:\trend product finder\web\ (index.html + data\*.json)
-Live  : c0df1d8 (chip kategori + flag API/BY GOOGLE + label tab, 689 item)
+Live  : 87d0402 (chip kategori + flag API/BY GOOGLE, tab asli, 689 item)
 
 CARA REFRESH (manual, ~2 menit):
   1. git clone <space> _dep (atau pull bila sudah ada)
