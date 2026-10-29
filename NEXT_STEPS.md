@@ -40,9 +40,14 @@
   (supaya posisi lama tidak dipulihkan saat data refresh). Ada `aria-label`/`title`.
 - Uji Playwright + Chrome asli (lokal & live): tersembunyi di atas, muncul setelah scroll,
   klik -> scrollY 0 + tombol sembunyi lagi. LULUS.
+- Sinkron repo<->live: `git pull` (merge origin/main) membawa 2 snapshot SocialCrawl
+  (19 & 26 Okt). Data digabung: 122 item sc- baru dari kolektor + 18 item diperbarui,
+  sc- lama yang sudah digantikan dibuang, tambahan kita (20 atasan Shopee + 38 tas TikTok)
+  tetap -> **682 item**, semua ber-`updated`, terurut terbaru di atas.
+- Push GitHub `0692263` (sinkron origin/main) + deploy Space `79c7ed4`.
 
 ## Current State
-- Live: `3f2cec5` (689 item; chip kategori + flag sumber; tombol back-to-top)
+- Live: `79c7ed4` (682 item; chip kategori + flag sumber; tombol back-to-top)
 - Kuota: Syphoon 3/40 (TANPA endpoint search) • Apify $0,0008 HABIS • Captapi +-80/100
   • SocialCrawl 74/100
 - OPEN: subdomain akankah.eu.org (A/B/C) + enrich sold (detail 503) +

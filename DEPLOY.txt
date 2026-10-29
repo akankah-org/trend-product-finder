@@ -1,9 +1,9 @@
-﻿DEPLOY â€” Fashion Radar (HF Static Space, gratis)
+DEPLOY â€” Fashion Radar (HF Static Space, gratis)
 
 URL   : https://120n1aja-fashion-radar.static.hf.space
 Repo  : https://huggingface.co/spaces/120n1aja/fashion-radar (sdk: static)
 Sumber: E:\trend product finder\web\ (index.html + data\*.json)
-Live  : 3f2cec5 (chip kategori + flag API/BY GOOGLE + tombol back-to-top, 689 item)
+Live  : 79c7ed4 (682 item; chip kategori + flag API/BY GOOGLE + back-to-top)
 
 CARA REFRESH (manual, ~2 menit):
   1. git clone <space> _dep (atau pull bila sudah ada)
