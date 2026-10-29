@@ -34,9 +34,15 @@
 - Verifikasi 26 Okt: urutan "terbaru di atas" = 0 pelanggaran di 10 kombinasi
   tab+kategori (Semua 689, Shopee 153, TikTok 477, Pembeli Berulang 100, dst)
 
+## Done (29 Okt)
+- Tombol **back-to-top** di web: bulat 46x46 px kanan-bawah, muncul bila scroll >400 px,
+  klik -> `scrollTo({top:0,behavior:'smooth'})` + reset `fradar.y` di localStorage
+  (supaya posisi lama tidak dipulihkan saat data refresh). Ada `aria-label`/`title`.
+- Uji Playwright + Chrome asli (lokal & live): tersembunyi di atas, muncul setelah scroll,
+  klik -> scrollY 0 + tombol sembunyi lagi. LULUS.
+
 ## Current State
-- Live: `c0df1d8` (689 item; chip kategori + flag sumber; Shopee=Atasan Wanita,
-  TikTok=Tas Wanita)
+- Live: `3f2cec5` (689 item; chip kategori + flag sumber; tombol back-to-top)
 - Kuota: Syphoon 3/40 (TANPA endpoint search) • Apify $0,0008 HABIS • Captapi +-80/100
   • SocialCrawl 74/100
 - OPEN: subdomain akankah.eu.org (A/B/C) + enrich sold (detail 503) +
